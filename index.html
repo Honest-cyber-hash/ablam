@@ -6,7 +6,6 @@
     <title>Ablam İçin Özür Sayfası</title>
     <style>
         body {
-            /* 1) Arka plan pembe */
             background-color: #ffc0cb;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -20,48 +19,56 @@
         .container {
             text-align: center;
             background: white;
-            padding: 40px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             position: relative;
-            max-width: 500px;
+            max-width: 400px;
             width: 90%;
+        }
+
+        /* Fotoğraf Stili */
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #ffc0cb;
+            margin-bottom: 15px;
         }
 
         h1 {
             color: #d81b60;
-            margin-bottom: 30px;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
 
         .btn-group {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 20px;
             position: relative;
-            height: 120px;
+            height: 80px;
             align-items: center;
         }
 
         button {
             border: none;
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 12px 25px;
+            font-size: 16px;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
+            transition: all 0.3s ease;
         }
 
-        /* 2) Yeşil kutucuk */
         #acceptBtn {
             background-color: #4caf50;
             color: white;
-            z-index: 100;
+            z-index: 10;
         }
 
-        /* 2) Kırmızı kutucuk */
         #rejectBtn {
             background-color: #f44336;
             color: white;
@@ -69,30 +76,21 @@
             left: 55%;
         }
 
-        /* 5) Final mesajı ve fotoğraf alanı */
         #finalMessage {
-            display: none; /* İlk başta gizli */
-            animation: fadeIn 1s ease-in;
+            display: none;
         }
 
-        .result-img {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 15px;
-            margin-top: 20px;
-            border: 5px solid #ffc0cb;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        #finalMessage h2 {
+            color: #2e7d32;
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
 
     <div class="container" id="mainContainer">
+        <img src="abla.jpg" alt="Ablamla Biz" class="profile-img" id="mainImg">
+        
         <h1 id="questionText">Ablacım, beni affeder misin?</h1>
         
         <div class="btn-group" id="btnGroup">
@@ -101,9 +99,8 @@
         </div>
 
         <div id="finalMessage">
-            <h2 style="color: #2e7d32; line-height: 1.5;">ÇOK TEŞEKKÜR EDERİMM BİR DAHA SANA KARŞI KONUŞURKEN TERBİYESİZLİK YAPMIYCAM :)</h2>
-            <div style="font-size: 40px; margin: 10px 0;">💖✨🌈</div>
-            <img src="abla.jpg" alt="Canım Ablam" class="result-img">
+            <h2>ÇOK TEŞEKKÜR EDERİMM BİR DAHA SANA KARŞI KONUŞURKEN TERBİYESİZLİK YAPMIYCAM :)</h2>
+            <div style="font-size: 40px;">💖✨🎈</div>
         </div>
     </div>
 
@@ -113,21 +110,20 @@
         let greenBtnScale = 1;
         let redBtnScale = 1;
 
-        // 3) Kırmızı kutucuk küçülür ve hareket eder, yeşil büyür
         function moveRejectButton() {
             const redBtn = document.getElementById('rejectBtn');
             const greenBtn = document.getElementById('acceptBtn');
             
-            redBtnScale -= 0.1;
+            redBtnScale -= 0.12;
             if (redBtnScale < 0.2) redBtnScale = 0.2;
             redBtn.style.transform = `scale(${redBtnScale})`;
 
-            greenBtnScale += 0.2;
+            greenBtnScale += 0.15;
             greenBtn.style.transform = `scale(${greenBtnScale})`;
 
             const container = document.getElementById('mainContainer');
-            const maxWidth = container.clientWidth - redBtn.clientWidth - 50;
-            const maxHeight = container.clientHeight - redBtn.clientHeight - 50;
+            const maxWidth = container.clientWidth - redBtn.clientWidth - 20;
+            const maxHeight = container.clientHeight - redBtn.clientHeight - 20;
 
             redBtn.style.left = Math.random() * maxWidth + 'px';
             redBtn.style.top = Math.random() * maxHeight + 'px';
@@ -137,34 +133,15 @@
             moveRejectButton();
         }
 
-        // 5) Yeşil kutucuğa basınca havai fişek ve final
         function acceptApology() {
             document.getElementById('questionText').style.display = 'none';
             document.getElementById('btnGroup').style.display = 'none';
+            document.getElementById('mainImg').style.display = 'none';
             
             const finalMessage = document.getElementById('finalMessage');
             finalMessage.style.display = 'block';
 
-            // Havai fişek şöleni
-            var duration = 5 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-            function randomInRange(min, max) {
-              return Math.random() * (max - min) + min;
-            }
-
-            var interval = setInterval(function() {
-              var timeLeft = animationEnd - Date.now();
-
-              if (timeLeft <= 0) {
-                return clearInterval(interval);
-              }
-
-              var particleCount = 50 * (timeLeft / duration);
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
     </script>
 </body>
