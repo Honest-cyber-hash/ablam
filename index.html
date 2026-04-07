@@ -190,3 +190,174 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ablam İçin Özür Sayfası</title>
+    <style>
+        body {
+            /* 1) Arka plan pembe */
+            background-color: #ffc0cb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #d81b60;
+            margin-bottom: 30px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            position: relative;
+            height: 120px;
+            align-items: center;
+        }
+
+        button {
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        /* 2) Yeşil kutucuk */
+        #acceptBtn {
+            background-color: #4caf50;
+            color: white;
+            z-index: 100;
+        }
+
+        /* 2) Kırmızı kutucuk */
+        #rejectBtn {
+            background-color: #f44336;
+            color: white;
+            position: absolute;
+            left: 55%;
+        }
+
+        /* 5) Final mesajı ve fotoğraf alanı */
+        #finalMessage {
+            display: none; /* İlk başta gizli */
+            animation: fadeIn 1s ease-in;
+        }
+
+        .result-img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 5px solid #ffc0cb;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <h1 id="questionText">Ablacım, beni affeder misin?</h1>
+        
+        <div class="btn-group" id="btnGroup">
+            <button id="acceptBtn" onclick="acceptApology()">Nolur beni affet</button>
+            <button id="rejectBtn" onmouseover="moveRejectButton()" onclick="rejectClicked()">asla</button>
+        </div>
+
+        <div id="finalMessage">
+            <h2 style="color: #2e7d32; line-height: 1.5;">ÇOK TEŞEKKÜR EDERİMM BİR DAHA SANA KARŞI KONUŞURKEN TERBİYESİZLİK YAPMIYCAM :)</h2>
+            <div style="font-size: 40px; margin: 10px 0;">💖✨🌈</div>
+            <img src="abla.jpg" alt="Canım Ablam" class="result-img">
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        let greenBtnScale = 1;
+        let redBtnScale = 1;
+
+        // 3) Kırmızı kutucuk küçülür ve hareket eder, yeşil büyür
+        function moveRejectButton() {
+            const redBtn = document.getElementById('rejectBtn');
+            const greenBtn = document.getElementById('acceptBtn');
+            
+            redBtnScale -= 0.1;
+            if (redBtnScale < 0.2) redBtnScale = 0.2;
+            redBtn.style.transform = `scale(${redBtnScale})`;
+
+            greenBtnScale += 0.2;
+            greenBtn.style.transform = `scale(${greenBtnScale})`;
+
+            const container = document.getElementById('mainContainer');
+            const maxWidth = container.clientWidth - redBtn.clientWidth - 50;
+            const maxHeight = container.clientHeight - redBtn.clientHeight - 50;
+
+            redBtn.style.left = Math.random() * maxWidth + 'px';
+            redBtn.style.top = Math.random() * maxHeight + 'px';
+        }
+
+        function rejectClicked() {
+            moveRejectButton();
+        }
+
+        // 5) Yeşil kutucuğa basınca havai fişek ve final
+        function acceptApology() {
+            document.getElementById('questionText').style.display = 'none';
+            document.getElementById('btnGroup').style.display = 'none';
+            
+            const finalMessage = document.getElementById('finalMessage');
+            finalMessage.style.display = 'block';
+
+            // Havai fişek şöleni
+            var duration = 5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+
+              var particleCount = 50 * (timeLeft / duration);
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
